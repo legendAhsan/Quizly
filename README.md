@@ -1,2 +1,2 @@
-# Quizly
-Quizly is a website which takes the javascript quiz from the user. It is built with a MERN stack. Its still underprocess...
+# Quizly (UnderProcess)
+Quizly is a website which takes the javascript quiz from the user. It is built with a MERN stack.
