@@ -1,15 +1,15 @@
-import react from "react";
 import Answer from "./Answer";
 
 function AnswerList(props) {
 	const options = [];
-	for (let i = 0; i < props.dataSet.length; i++) {
+
+	for (let i = 0; i < props.options.length; i++) {
 		options.push(
 			<Answer
-				key={i}
-				choice={i}
+				key={props.options[i]._id}
+				choice={props.options[i]._id}
 				handleClick={props.handleClick}
-				answer={props.dataSet[i]}
+				answer={props.options[i].answer}
 			/>,
 		);
 	}

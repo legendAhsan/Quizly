@@ -1,60 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Questionnaire from "./Questionnaire";
-import axios from "axios";
+import Cookies from "js-cookie";
+import Navbar from "./Navbar";
 
-const Home = ({ firstName, onSubmitHandler }) => {
-	console.log("home component rerender");
+const Home = () => {
 	const history = useHistory();
 
-	const [data, setdata] = useState({ loader: true, err: "" });
-
-	var axiosInterceptor = null;
-	if (!!axiosInterceptor || axiosInterceptor === 0) {
-		axios.interceptors.request.eject(axiosInterceptor);
-	}
-	axiosInterceptor = axios.interceptors.response.use(
-		(response) => {
-			return response;
-		},
-		(error) => {
-			if (error.response.status === 401) {
-				error.data = error.response.data;
-			}
-			return Promise.reject(error);
-		},
-	);
+	const [data, setdata] = useState({ loader: true });
 
 	useEffect(() => {
-		axios
-			.get("/api/dashboard")
-			.then((res) => {
-				if (res.data) {
-					setdata({ loader: false, err: "" });
-				} else {
-					onSubmitHandler({ firstName: "", lastName: "" });
-					history.push("/");
-				}
-			})
-			.catch((e) => {
-				setdata({ loader: false, err: e.data });
-				onSubmitHandler({ firstName: "", lastName: "" });
-			});
-	}, [firstName]);
-	console.log("in home firstname value", firstName);
+		if (Cookies.get("jwt")) {
+			setdata({ loader: false });
+		} else {
+			history.push("/");
+		}
+	}, [history]);
+
 	return (
-		<div>
+		<>
+			<Navbar />
 			{data.loader ? (
-				<h3>Loading...</h3>
-			) : data.err !== "" ? (
-				<h3>{data.err}</h3>
+				"Loading..."
 			) : (
 				<div>
-					<h1>JavaScript Quiz</h1>
-					<Questionnaire firstName={firstName} />
+					<Questionnaire />
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 

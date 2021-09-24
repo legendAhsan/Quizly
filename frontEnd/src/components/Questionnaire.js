@@ -1,20 +1,35 @@
-import react, { Component } from "react";
-import dataSet from "../api/dataSet";
+import { Component } from "react";
+import axios from "axios";
 import QuizArea from "./QuizArea";
 import ScoreArea from "./ScoreArea";
+import Cookies from "js-cookie";
 
 class Questionnaire extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			current: 0,
-			dataSet: dataSet,
+			dataSet: [],
 			correct: 0,
 			incorrect: 0,
 			isFinished: false,
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
+
+	componentDidMount() {
+		if (Cookies.get("quizID")) {
+			axios
+				.post("/questions", { quizID: Cookies.get("quizID") })
+				.then((res) => {
+					this.setState({ ...this.state, dataSet: res.data });
+				});
+		} else {
+			alert("Please select a quiz first");
+			window.location.href = "/dashboard";
+		}
+	}
+
 	handleClick(choice) {
 		if (choice === this.state.dataSet[this.state.current].correct) {
 			this.setState({ correct: this.state.correct + 1 });
@@ -29,20 +44,24 @@ class Questionnaire extends Component {
 		}
 	}
 	render() {
-		console.log("firstname value in quiz area", this.props.firstName);
 		return (
 			<div>
-				<QuizArea
-					handleClick={this.handleClick}
-					isFinished={this.state.isFinished}
-					correct={this.state.correct}
-					dataSet={this.state.dataSet[this.state.current]}
-					firstName={this.props.firstName}
-				/>
-				<ScoreArea
-					correct={this.state.correct}
-					incorrect={this.state.incorrect}
-				/>
+				{this.state.dataSet.length === 0 ? (
+					<h6>Data not available</h6>
+				) : (
+					<div>
+						<QuizArea
+							handleClick={this.handleClick}
+							isFinished={this.state.isFinished}
+							correctScore={this.state.correct}
+							data={this.state.dataSet[this.state.current]}
+						/>
+						<ScoreArea
+							correct={this.state.correct}
+							incorrect={this.state.incorrect}
+						/>
+					</div>
+				)}
 			</div>
 		);
 	}

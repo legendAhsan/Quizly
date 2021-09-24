@@ -1,56 +1,37 @@
-import { useState, useCallback } from "react";
 import "./App.css";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import Login from "./components/Login";
-import Secret from "./components/Secret";
+import CreateQuiz from "./components/CreateQuiz";
 import Home from "./components/Home";
 import Logout from "./components/Logout";
+import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
 
 function App() {
-	const [data, setdata] = useState({ firstName: "", lastName: "" });
-
-	const onSubmitHandler = (valuesPassed) => {
-		console.log("Submit Handler Function");
-		setdata({
-			firstName: valuesPassed.firstName,
-			lastName: valuesPassed.lastName,
-		});
-	};
-
 	return (
 		<div className="App">
 			<Router>
-				<Navbar firstName={data.firstName} />
 				<Switch>
+					<Route path="/" exact render={() => <Login />} />
 					<Route
-						path="/"
 						exact
-						render={() => (
-							<Login onSubmitHandler={onSubmitHandler} />
-						)}
+						path="/register"
+						component={() => <Register />}
 					/>
 					<Route
 						exact
 						path="/dashboard"
-						component={() => (
-							<Home
-								firstName={data.firstName}
-								onSubmitHandler={onSubmitHandler}
-							/>
-						)}
+						component={() => <Dashboard />}
 					/>
 					<Route
 						exact
-						path="/logout"
-						render={() => (
-							<Logout
-								onSubmitHandler={onSubmitHandler}
-								firstName={data.firstName}
-							/>
-						)}
+						path="/create-quiz"
+						component={() => <CreateQuiz />}
 					/>
+					<Route exact path="/home" component={() => <Home />} />
+					<Route exact path="/logout" render={() => <Logout />} />
 				</Switch>
 			</Router>
 		</div>

@@ -1,4 +1,3 @@
-import react from "react";
 import TotalCorrect from "./TotalCorrect";
 import TotalIncorrect from "./TotalIncorrect";
 

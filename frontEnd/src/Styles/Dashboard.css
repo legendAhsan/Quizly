@@ -1,0 +1,33 @@
+div#cardContents {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 10px;
+}
+
+.card {
+	margin: 5px;
+	padding: 5px;
+	width: 286px;
+	height: 331px;
+	box-sizing: border-box;
+}
+
+img.card-img-top {
+	height: 50%;
+	object-fit: fill;
+}
+
+h5.card-title {
+	margin-bottom: 8px;
+}
+
+p.card-text {
+	margin-bottom: 5px;
+}
+
+span {
+	color: white;
+	background-color: green;
+	padding: 4px;
+	font-size: large;
+}

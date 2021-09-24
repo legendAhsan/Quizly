@@ -1,4 +1,3 @@
-import react from "react";
 
 function Totalcorrect(props) {
 	return (
