@@ -4,9 +4,12 @@ import Cookies from "js-cookie";
 
 function Navbar() {
 	// console.log("navbar rendered",firstName);
-	const [emal, setEmail] = useState("");
+	const [emal, setEmail] = useState({ jwt: "", admin: "" });
 	useEffect(() => {
-		setEmail(Cookies.get("jwt") ? Cookies.get("jwt") : "");
+		setEmail({
+			jwt: Cookies.get("jwt") ? Cookies.get("jwt") : "",
+			admin: Cookies.get("admin") === true ? Cookies.get("admin") : "",
+		});
 		console.log(Cookies.get("admin"));
 	}, []);
 	return (
@@ -36,27 +39,38 @@ function Navbar() {
 								Home <span className="sr-only">(current)</span>
 							</Link>
 						</li>
-						{emal !== "" ? (
-							<li className="nav-item">
-								<Link className="nav-link" to="/logout">
-									Logout
-								</Link>
-							</li>
+						{emal.jwt !== "" ? (
+							<>
+								<li className="nav-item">
+									<Link
+										className="nav-link"
+										to="/create-quiz"
+									>
+										Create Quiz
+									</Link>
+								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/join-quiz">
+										Join Quiz
+									</Link>
+								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/history">
+										History
+									</Link>
+								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/logout">
+										Logout
+									</Link>
+								</li>
+							</>
 						) : (
 							<li className="nav-item">
 								<Link className="nav-link" to="/">
 									Login
 								</Link>
 							</li>
-						)}
-						{Cookies.get("admin") === "true" ? (
-							<li className="nav-item">
-								<Link className="nav-link" to="/create-quiz">
-									Create Quiz
-								</Link>
-							</li>
-						) : (
-							""
 						)}
 					</ul>
 				</div>

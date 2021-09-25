@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
-const { Users, Quiz, Question } = require("./Schema");
+const { Users, Quiz, Question, UAQ } = require("./Schema");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const auth = require("./auth.js");
@@ -19,11 +18,6 @@ mongoose
 	.catch((err) => console.log("err", err));
 
 app.post("/register", async (req, res) => {
-	// let data = await loginDetail.find({ email: req.body.email });
-	// if(data.length!==0){
-	// 	res.status.apply(404).send('User already registered.');
-	// 	return;
-	// }
 	let UserRecord = new Users({
 		email: req.body.email,
 		password: req.body.password,
@@ -55,6 +49,7 @@ app.post("/login", async (req, res) => {
 app.post("/create-quiz", auth, (req, res) => {
 	let quiz = new Quiz({
 		_id: req.body.basicINFO._id,
+		uid: req.decoded._id,
 		title: req.body.basicINFO.title,
 		description: req.body.basicINFO.description,
 	});
@@ -79,18 +74,8 @@ app.post("/create-quiz", auth, (req, res) => {
 		});
 });
 
-app.get("/secret", (req, res) => {
-	let aid = mongoose.Types.ObjectId();
-	console.log(aid);
-	if (mongoose.Types.ObjectId.isValid(aid)) {
-		res.send("secret page io");
-	} else {
-		res.send("haha");
-	}
-});
-
 app.post("/dashboardhandler", auth, async (req, res) => {
-	let data = await Quiz.find();
+	let data = await Quiz.find({ uid: req.decoded._id });
 	if (data.length === 0) {
 		return res.send("No quiz");
 	}
@@ -105,19 +90,45 @@ app.post("/delete-quiz", auth, async (req, res) => {
 });
 
 app.post("/questions", auth, async (req, res) => {
-	console.log(req.body.quizID);
 	let data = await Question.find({ quiz_id: req.body.quizID });
 	console.log(data);
 	res.send(data);
 });
 
-app.post("/status", auth, async (req, res) => {
-	let resp = await user.updateOne(
-		{ _id: req.decoded._id },
-		{ $set: { [`progress.${req.body.index}`]: true } },
-	);
-	console.log(resp);
-	res.send(resp);
+app.post("/quiz-attempted", auth, async (req, res) => {
+	let data = new UAQ({
+		_id: req.decoded._id,
+		quiz_id: req.body.quizID,
+		score: req.body.score,
+	});
+	await data.save();
+	res.send(true);
+});
+
+app.get("/quiz-attempted", auth, async (req, res) => {
+	let attempt = await UAQ.find({
+		_id: req.decoded._id,
+		quiz_id: req.query.quizID,
+	});
+
+	let ownerShip = await Quiz.find({
+		uid: req.decoded._id,
+		_id: req.query.quizID,
+	});
+
+	res.send({ data: attempt, ownerShip: ownerShip });
+});
+
+app.post("/quiz", auth, async (req, res) => {
+	let data = await Quiz.find({ _id: req.body.quizID });
+	res.send(data);
+});
+
+app.post("/quiz-history", auth, async (req, res) => {
+	let d = await UAQ.find({ _id: req.decoded._id });
+	let arr = d.map((a) => a.quiz_id);
+	let data = await Quiz.find({ _id: { $in: arr } });
+	res.send(data);
 });
 
 app.listen(5000, () => console.log("server is listening"));

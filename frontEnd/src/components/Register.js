@@ -6,7 +6,7 @@ axios.defaults.withCredentials = true;
 
 const Register = () => {
 	const history = useHistory();
-	const [data, setdata] = useState({ firstName: "", lastName: "" });
+	const [data, setdata] = useState({ email: "", password: "" });
 
 	function changeHandler(e) {
 		setdata({ ...data, [e.target.name]: e.target.value });
@@ -22,7 +22,7 @@ const Register = () => {
 				history.push("/");
 			}
 		} catch (e) {
-			alert('Email is already Registered. Try with another one.');
+			alert("Email is already Registered. Try with another one.");
 			console.log("error occured while submitting form", e);
 		}
 	};
@@ -34,8 +34,8 @@ const Register = () => {
 				<input
 					type="text"
 					className="form-control"
-					name="firstName"
-					value={data.firstName}
+					name="email"
+					value={data.email}
 					onChange={changeHandler}
 					id="registerEmail"
 					placeholder="Enter email"
@@ -46,8 +46,8 @@ const Register = () => {
 				<input
 					type="text"
 					className="form-control"
-					name="lastName"
-					value={data.lastName}
+					name="password"
+					value={data.password}
 					onChange={changeHandler}
 					id="registerPassword"
 					placeholder="Password"

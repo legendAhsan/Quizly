@@ -21,13 +21,14 @@ function Dashboard() {
 		async function fetchDashboard() {
 			try {
 				const response = await axios.post("/dashboardhandler");
+
 				if (response.data === false) {
 					history.push("/");
 				} else if (response.data === "No quiz") {
 					setDashboardState({
 						...dashboardState,
 						loading: false,
-						error: "There is no quiz available",
+						error: "You have not created any Quiz yet.",
 					});
 				} else {
 					setDashboardState({
@@ -54,7 +55,10 @@ function Dashboard() {
 	return dashboardState.loading ? (
 		<p>Loading....</p>
 	) : dashboardState.error !== "" ? (
-		<h6>{dashboardState.error}</h6>
+		<>
+			<Navbar />
+			<h6>{dashboardState.error}</h6>
+		</>
 	) : (
 		<>
 			<Navbar />

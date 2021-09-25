@@ -4,7 +4,12 @@ import UserGreeting from "./UserGreeting";
 
 function QuizArea(props) {
 	if (props.isFinished === true) {
-		return <UserGreeting correctScore={props.correctScore} />;
+		return (
+			<UserGreeting
+				correctScore={props.correctScore}
+				totalQuestion={props.totalQuestion}
+			/>
+		);
 	}
 
 	return (

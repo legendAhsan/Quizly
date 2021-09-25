@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 const QuizSchema = new mongoose.Schema({
+	uid: String,
 	title: String,
 	description: String,
 	DOC: { type: Date, default: Date.now },
@@ -26,17 +27,16 @@ const QuestionSchema = new mongoose.Schema({
 	correct: { type: String },
 });
 
-const LogSchema = new mongoose.Schema({
-	email: { type: String },
-	data: {
-		q_id: { type: String },
-		a_id: { type: String },
-	},
-});
+// const LogSchema = new mongoose.Schema({
+// 	_id: { type: String },
+// 	quiz_id: { type: String },
+// 	q_id: { type: String },
+// 	a_id: { type: String },
+// });
 
 const UAQSchema = new mongoose.Schema({
-	email: String,
 	quiz_id: String,
+	score: Number,
 	attemptDate: { type: Date, default: Date.now },
 });
 
@@ -55,7 +55,7 @@ UserSchema.pre("save", async function (next) {
 const Users = mongoose.model("LoginDetail", UserSchema);
 const Quiz = mongoose.model("Quiz", QuizSchema);
 const Question = mongoose.model("Question", QuestionSchema);
-const Log = mongoose.model("LogData", LogSchema);
+// const Log = mongoose.model("LogDasta", LogSchema);
 const UAQ = mongoose.model("UAQ", UAQSchema);
 
-module.exports = { Users, Quiz, Question, Log, UAQ };
+module.exports = { Users, Quiz, Question, UAQ };

@@ -55,6 +55,7 @@ class Questionnaire extends Component {
 							isFinished={this.state.isFinished}
 							correctScore={this.state.correct}
 							data={this.state.dataSet[this.state.current]}
+							totalQuestion={this.state.dataSet.length}
 						/>
 						<ScoreArea
 							correct={this.state.correct}
